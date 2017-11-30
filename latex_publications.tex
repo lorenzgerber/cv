@@ -1,0 +1,394 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Document Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Don't like 10pt? Try 11pt or 12pt
+\documentclass[10pt]{article}
+
+% The automated optical recognition software used to digitize resume
+% information works best with fonts that do not have serifs. This
+% command uses a sans serif font throughout. Uncomment both lines (or at
+% least the second) to restore a Roman font (i.e., a font with serifs).
+%\usepackage{times}
+%\renewcommand{\familydefault}{\sfdefault}
+
+% This is a helpful package that puts math inside length specifications
+\usepackage{calc}
+
+% Layout: Puts the section titles on left side of page
+\reversemarginpar
+
+%
+%         PAPER SIZE, PAGE NUMBER, AND DOCUMENT LAYOUT NOTES:
+%
+% The next \usepackage line changes the layout for CV style section
+% headings as marginal notes. It also sets up the paper size as either
+% letter or A4. By default, letter was used. If A4 paper is desired,
+% comment out the letterpaper lines and uncomment the a4paper lines.
+%
+% As you can see, the margin widths and section title widths can be
+% easily adjusted.
+%
+% ALSO: Notice that the includefoot option can be commented OUT in order
+% to put the PAGE NUMBER *IN* the bottom margin. This will make the
+% effective text area larger.
+%
+% IF YOU WISH TO REMOVE THE ``of LASTPAGE'' next to each page number,
+% see the note about the +LP and -LP lines below. Comment out the +LP
+% and uncomment the -LP.
+%
+% IF YOU WISH TO REMOVE PAGE NUMBERS, be sure that the includefoot line
+% is uncommented and ALSO uncomment the \pagestyle{empty} a few lines
+% below.
+%
+
+%% Use these lines for letter-sized paper
+%\usepackage[paper=letterpaper,
+%            %includefoot, % Uncomment to put page number above margin
+%            marginparwidth=1.2in,     % Length of section titles
+%            marginparsep=.05in,       % Space between titles and text
+%            margin=1in,               % 1 inch margins
+%            includemp]{geometry}
+
+%% Use these lines for A4-sized paper
+\usepackage[paper=a4paper,
+  %includefoot, % Uncomment to put page number above margin
+  marginparwidth=30.5mm,    % Length of section titles
+  marginparsep=1.5mm,       % Space between titles and text
+  margin=25mm,              % 25mm margins
+  includemp]{geometry}
+
+%% More layout: Get rid of indenting throughout entire document
+\setlength{\parindent}{0in}
+
+\usepackage[shortlabels]{enumitem}
+
+% Simpler bibsection for CV sections
+% (thanks to natbib for inspiration)
+
+\makeatletter
+\newlength{\bibhang}
+\setlength{\bibhang}{1em}
+\newlength{\bibsep}
+          {\@listi \global\bibsep\itemsep \global\advance\bibsep by\parsep}
+          \newlist{bibsection}{itemize}{3}
+          \setlist[bibsection]{label=}
+          \newlist{bibenum}{enumerate}{3}
+          \setlist[bibenum]{resume,label=[\arabic*]}
+          \setlist*[bibsection,bibenum]{%
+            itemindent=-\bibhang,
+            itemsep=\bibsep,parsep=\z@,partopsep=0pt,
+            topsep=0pt}
+          \setlist*[bibsection]{leftmargin=\bibhang}
+          \let\oldendbibenum\endbibenum
+          \def\endbibenum{\oldendbibenum\vspace{-.6\baselineskip}}
+          \let\oldendbibsection\endbibsection
+          \def\endbibsection{\oldendbibsection\vspace{-.6\baselineskip}}
+          \makeatother
+
+          %% Reference the last page in the page number
+          %
+          % NOTE: comment the +LP line and uncomment the -LP line to have page
+          %       numbers without the ``of ##'' last page reference)
+          %
+          % NOTE: uncomment the \pagestyle{empty} line to get rid of all page
+          %       numbers (make sure includefoot is commented out above)
+          %
+          \usepackage{fancyhdr,lastpage}
+          \pagestyle{fancy}
+          %\pagestyle{empty}      % Uncomment this to get rid of page numbers
+          \fancyhf{}\renewcommand{\headrulewidth}{0pt}
+          \fancyfootoffset{\marginparsep+\marginparwidth}
+          \newlength{\footpageshift}
+          \setlength{\footpageshift}
+                    {0.5\textwidth+0.5\marginparsep+0.5\marginparwidth-2in}
+                    \lfoot{\hspace{\footpageshift}%
+                      \parbox{4in}{\, \hfill %
+                        \arabic{page} of \protect\pageref*{LastPage} % +LP
+                        %                    \arabic{page}                               % -LP
+                        \hfill \,}}
+
+                    % Finally, give us PDF bookmarks
+                    \usepackage{color,hyperref}
+                    \definecolor{darkblue}{rgb}{0.0,0.0,0.3}
+                    \hypersetup{colorlinks,breaklinks,
+                      linkcolor=darkblue,urlcolor=darkblue,
+                      anchorcolor=darkblue,citecolor=darkblue}
+
+                    % Support for including a picture
+                    \usepackage{graphicx}
+
+                    %%%%%%%%%%%%%%%%%%%%%%%% End Document Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+                    %%%%%%%%%%%%%%%%%%%%%%%%%%% Helper Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+                    % The title (name) with a horizontal rule under it
+                    % (optional argument typesets an object right-justified across from name
+                    %  as well)
+                    %
+                    % Usage: \makeheading{name}
+                    %        OR
+                    %        \makeheading[right_object]{name}
+                    %
+                    % Place at top of document. It should be the first thing.
+                    % If ``right_object'' is provided in the square-braced optional
+                    % argument, it will be right justified on the same line as ``name'' at
+                    % the top of the CV. For example:
+                    %
+                    %       \makeheading[\emph{Curriculum vitae}]{Your Name}
+                    %
+                    % will put an emphasized ``Curriculum vitae'' at the top of the document
+                    % as a title. Likewise, a picture could be included:
+                    %
+                    %   \makeheading[\includegraphics[height=1.5in]{my_picutre}]{Your Name}
+                    %
+                    % the picture will be flush right across from the name.
+                    \newcommand{\makeheading}[2][]%
+                               {\hspace*{-\marginparsep minus \marginparwidth}%
+                                 \begin{minipage}[t]{\textwidth+\marginparwidth+\marginparsep}%
+                                   {\large \bfseries #2 \hfill #1}\\[-0.15\baselineskip]%
+                                   \rule{\columnwidth}{1pt}%
+                               \end{minipage}}
+
+                               % The section headings
+                               %
+                               % Usage: \section{section name}
+                               \renewcommand{\section}[1]{\pagebreak[3]%
+                                 \hyphenpenalty=10000%
+                                 \vspace{1.3\baselineskip}%
+                                 \phantomsection\addcontentsline{toc}{section}{#1}%
+                                 \noindent\llap{\scshape\smash{\parbox[t]{\marginparwidth}{\raggedright #1}}}%
+                                 \vspace{-\baselineskip}\par}
+
+                               % An itemize-style list with lots of space between items
+                               \newenvironment{outerlist}[1][\enskip\textbullet]%
+                                              {\begin{itemize}[#1,leftmargin=*]}{\end{itemize}%
+                                                \vspace{-.6\baselineskip}}
+
+                                              % An environment IDENTICAL to outerlist that has better pre-list spacing
+                                              % when used as the first thing in a \section
+                                              \newenvironment{lonelist}[1][\enskip\textbullet]%
+                                                             {\begin{list}{#1}{%
+                                                                   \setlength{\partopsep}{0pt}%
+                                                                   \setlength{\topsep}{0pt}}}
+                                                             {\end{list}\vspace{-.6\baselineskip}}
+
+                                                             % An itemize-style list with little space between items
+                                                             \newenvironment{innerlist}[1][\enskip\textbullet]%
+                                                                            {\begin{itemize}[#1,leftmargin=*,parsep=0pt,itemsep=0pt,topsep=0pt,partopsep=0pt]}
+                                                                            {\end{itemize}}
+
+                                                                            % An environment IDENTICAL to innerlist that has better pre-list spacing
+                                                                            % when used as the first thing in a \section
+                                                                            \newenvironment{loneinnerlist}[1][\enskip\textbullet]%
+                                                                                           {\begin{itemize}[#1,leftmargin=*,parsep=0pt,itemsep=0pt,topsep=0pt,partopsep=0pt]}
+                                                                                           {\end{itemize}\vspace{-.6\baselineskip}}
+
+                                                                                           % To add some paragraph space between lines.
+                                                                                           % This also tells LaTeX to preferably break a page on one of these gaps
+                                                                                           % if there is a needed pagebreak nearby.
+                                                                                           \newcommand{\blankline}{\quad\pagebreak[3]}
+                                                                                           \newcommand{\halfblankline}{\quad\vspace{-0.5\baselineskip}\pagebreak[3]}
+
+                                                                                           % Uses hyperref to link DOI
+                                                                                           \newcommand\doilink[1]{\href{http://dx.doi.org/#1}{#1}}
+                                                                                           \newcommand\doi[1]{doi:\doilink{#1}}
+
+                                                                                           % For \url{SOME_URL}, links SOME_URL to the url SOME_URL
+                                                                                           \providecommand*\url[1]{\href{#1}{#1}}
+                                                                                           % Same as above, but pretty-prints SOME_URL in teletype fixed-width font
+                                                                                           \renewcommand*\url[1]{\href{#1}{\texttt{#1}}}
+
+                                                                                           % For \email{ADDRESS}, links ADDRESS to the url mailto:ADDRESS
+                                                                                           \providecommand*\email[1]{\href{mailto:#1}{#1}}
+                                                                                           % Same as above, but pretty-prints ADDRESS in teletype fixed-width font
+                                                                                           %\renewcommand*\email[1]{\href{mailto:#1}{\texttt{#1}}}
+                                                                                           %\providecommand\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+                                                                                           %    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+                                                                                           %\providecommand\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+                                                                                           %    \TeX}}
+                                                                                           \providecommand\BibTeX{{B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+                                                                                               \TeX}}
+                                                                                           \providecommand\Matlab{\textsc{Matlab}}
+
+                                                                                           \newcommand\cvpic[0]{\includegraphics[height=40mm]{test2.png}}
+
+                                                                                           %%%%%%%%%%%%%%%%%%%%%%%% End Helper Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+                                                                                           %%%%%%%%%%%%%%%%%%%%%%%%% Begin CV Document %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+                                                                                           \begin{document}
+                                                                                           \makeheading[]{Lorenz Gerber}
+                                                                                           %\makeheading[\includegraphics[height=30mm]{test.png}]{Lorenz Gerber}
+                                                                                           %\makeheading[\emph{curriculum vitae}]{Lorenz Gerber}
+
+
+                                                                                           \section{Refereed Journal Publications}
+
+                                                                                           \begin{bibenum}
+
+                                                                                           \item Celine Davoine, Ilka N Abreu, Khalil Khajeh, Jeanette Blomberg
+                                                                                             Brendan N Kidd, Kemal Kazan, Peer M Schenk, \textbf{Lorenz Gerber},
+                                                                                             Ove Nilsson, Thomas Moritz, Stefan Bj\"orklund. Functional metabolomics
+                                                                                             as a tool to analyze Mediator function and structure in plants.
+                                                                                             \textit{PloS one}, 2017, 12 (6), e0179640.
+
+                                                                                           \item H\'elder Miranda, Peter Immerzeel, \textbf{Lorenz Gerber},
+                                                                                             Katarina H\"ornaeus, Sara Bergstr\"om Lind, Bgami Pattanaik, Pia
+                                                                                             Lindberg, Fikret Mamaedov, Peter Lindblad. SII1783, a monooxygenase
+                                                                                             associated with polysacharide processing in the unicellular
+                                                                                             cyanobacterium Synechocystis PCC 6803. \textit{Physiologia Plantarum},
+                                                                                             2017, 161 (2), 182--195.
+
+                                                                                           \item Julie Tolu, Johan Rydberg, Carsten Meyer-Jacob,
+                                                                                             \textbf{Lorenz Gerber}, Richard Bindler. Spatial variability of
+                                                                                             organic matter molecular composition and elemental geochemistry
+                                                                                             in surface sediments of a small boreal Swedish lake.
+                                                                                             \textit{Biogeosciences}, 2017, 16(7), 1773--1792.
+
+                                                                                           \item \textbf{Lorenz Gerber}, David \"{O}hman, Manoj Kumar, Philippe
+                                                                                             Ranocha, Deborah Goffner, Bj\"{o}rn Sunberg. High-throughput
+                                                                                             microanalysis of large lignocellulosic sample sets by
+                                                                                             Pyrolysis-Gas Chromatography/Mass
+                                                                                             Spectrometry. \textit{Physiologia Plantarum},
+                                                                                             2016, 156 (2), 127--138.
+
+
+                                                                                           \item Julie Tolu, \textbf{Lorenz Gerber}, Jean-Francois Boily,
+                                                                                             Richard Bindler. High-throughput method for characterizing
+                                                                                             organic matter composition in sediments with sub-mg sample
+                                                                                             size using Py-GC/MS and TPD-FTIR-MS. \textit{Analytica Chimica
+                                                                                               Acta}, 2015, 880, 93--102\\
+
+
+                                                                                           \item Madhavi Latha Gandla, Marta Derba-Maceluch, Xiaokun
+                                                                                             Liu, \textbf{Lorenz Gerber}, Emma R Master, Ewa Mellerowicz, Leif J
+                                                                                             J\"{o}nsson. Expression of a fungal glucuronoyl esterase in Populus:
+                                                                                             effects on wood properties and saccharification efficiency.
+                                                                                             \textit{Phytochemistry}, 2015, 210--220\\
+
+
+                                                                                           \item \textbf{Lorenz Gerber}, Viet Mai Hoang, Linh Tran,
+                                                                                             Hoang Anh Tuan Kiet, Per Malmberg, J\"{o}rg Hanrieder, Andrew Ewing.
+                                                                                             Using imaging ToF-SIMS data to determine the cell wall thickness of
+                                                                                             fibers in wood. \textit{Surface and Interface Analysis}, 2014,
+                                                                                             46(S1), 225--228\\
+
+
+                                                                                           \item \textbf{Lorenz Gerber}, Bo Zhang, Melissa Roach,
+                                                                                             Andras Gorzas, Umut Rende, Manoj Kumar, Ingo Burgert,
+                                                                                             Totte Niittyl\"{a}, Bj\"{o}rn Sundberg. Sucrose synthase
+                                                                                             activity is not essential for cellulose biosynthesis but important
+                                                                                             for overall carbon allocation to wood in hybrid aspen.
+                                                                                             \textit{The New Phytologist}, 2014, 203(4), 1220--30\\
+
+                                                                                           \item J\"{o}rg Hanrieder, \textbf{Lorenz Gerber}, \AA sa Persson
+                                                                                             Sandelius,  Eva Brittebo, Andrew G. Ewing, Oskar Karlsson.
+                                                                                             High Resolution Metabolite Imaging in Adult Hippocampus
+                                                                                             Following Neonatal Exposure to the Environmental Toxin BMAA
+                                                                                             using ToF SIMS. \textit{ACS Chemical Neuroscience}, 2014,
+                                                                                             5(7), 568--575\\
+
+                                                                                           \item Jorma Vahala, Judith Felten, Jonathan Love, Andras Gorzsas,
+                                                                                             \textbf{Lorenz Gerber}, Airi Lamminm\"{a}ki, Jaako KangajÃ¤rvi and Bj\"{o}rn
+                                                                                             Sundberg.
+                                                                                             A genome wide screen for ethylene induced ethylene response factors (ERFs) in hybrid aspen
+                                                                                             stem identifies fie ERF genes that modify wood properties.
+                                                                                             \textit{The new Phytologist}, 2013, 200(2), 511--522.\\
+
+
+                                                                                           \item Edouard Pesquet, Bo Zhang, Tuula Puhakainen, Odile Barbier,
+                                                                                             \textbf{Lorenz Gerber}, Sacha Escamez, Andr\'{a}s Gorzs\'{a}s,
+                                                                                             Charleen Courtois-Moreau, Edward Alatalo, Lars Paulin,
+                                                                                             Jaakko Kangasj\"arvi, Bj\"{o}rn Sundberg, Deborah Goffner,
+                                                                                             Hannele Tuominen. Non-cell automnomous lignification of
+                                                                                             trachery elements. \textit{The Plant Cell}, 2013, 25(4), 1314-28\\
+
+
+                                                                                           \item Rui Pinto, \textbf{Lorenz Gerber}, Bj\"{o}rn Sundberg,
+                                                                                             Johan Trygg. Strategy for minimizing between--study variation of large
+                                                                                             scale phenotypic experiments using multivariate analysis.
+                                                                                             \emph{Analytical Chemistry}, 2012, 84(20), 8675--8681\\
+
+
+                                                                                           \item David \"{O}hman, Brecht Demendts, Manoj Kumar,
+                                                                                             \textbf{Lorenz Gerber}, Andras Gorzsas, Geert Goeminne,
+                                                                                             Mattias Hedenst\"{o}m, Brian Ellis, Wout Boerjan, Bj\"{o}rn Sundberg (2012).
+                                                                                             MYB103 regulates FERULATE-5-HYDROXYLASE expression and
+                                                                                             syringyl lignin biosynthesis in Arabidopsis stems.
+                                                                                             \emph{The Plant Journal}, 2012, 73(1),63--76\\
+
+
+                                                                                           \item \textbf{Lorenz Gerber}, Mattias Eliasson, Johan Trygg,
+                                                                                             Thomas Moritz, Bj\"{o}rn Sundberg. Multivariate curve
+                                                                                             resolution provides a high-throughput data processing pipeline
+                                                                                             for pyrolysis-gas chromatography/mass spectrometry.
+                                                                                             \emph{Journal of Analytical and Applied Pyrolysis} 2012, 95, 95--100\\
+
+
+                                                                                           \item Melissa Roach, \textbf{Lorenz Gerber}, David Sandquist,
+                                                                                             Gorzas Andras, Matthias Hedenstr\"{o}m, Manoj Kumar,
+                                                                                             Marie-Caroline Steinhauser, Regina Feil, Geoffrey Daniel,
+                                                                                             Mark Stitt, Bj\"{o}rn Sundberg, Totte Niittyl\"{a}.
+                                                                                             Fructose kinase is required for carbon partitioning to
+                                                                                             cellulose in aspen. \emph{The Plant Journal}, 2012, 70(6), 967--977\\
+
+                                                                                           \item Anne-Mari Olsson, Ingela Bjurhager, \textbf{Lorenz Gerber},
+                                                                                             Bj\"{o}rn Sundberg, Lennart Salm\'{e}n. Ultra-structural
+                                                                                             organisation of cell wall polymers in normal and tension wood
+                                                                                             of aspen revealed by polarisation FTIR microspectroscopy.
+                                                                                             \emph{Planta}, 2011, 223(6), 1277--86.\\
+
+                                                                                           \item Ingela Bjurhager, Anne-Mari Olsson, Bo Zhang,
+                                                                                             \textbf{Lorenz Gerber}, Manoj Kumar, Lars A. Berglund,
+                                                                                             Ingo Burgert, Bj\"{o}rn Sundberg, Lennart Salm\'{e}n.
+                                                                                             Ultrastructure and mechanical properties of populus wood with
+                                                                                             reduced lignin content caused by transgenic down-regulation of
+                                                                                             cinnamate 4-hydroxylase. \emph{Biomacromolecules}, 2010, 11(9), 2359--65.\\
+
+                                                                                           \item Ai--Min Wu, Emma H\"{o}rnblad, Aline Voxeur, \textbf{Lorenz Gerber},
+                                                                                             Christophe Rihouey, Patrice Lerouge, Alan Marchant. Analysis
+                                                                                             of the arabidopsis IRX9/IRX9-L and IRX14/IRX14-L pairs of
+                                                                                             glycosyltransferase genes reveals critical contributions
+                                                                                             to biosynthesis of the hemicellulose glucuronoxylan. \emph{Plant
+                                                                                               Physiology}, 2010, 153(2), 542--554.\\
+
+                                                                                           \item Mattias Hedenstr\"{o}m, Susanne Wiklund-Lindstr\"{o}m,
+                                                                                             Tommy \"{O}man, Fachuang Lu, \textbf{Lorenz Gerber},
+                                                                                             Paul Schatz, Bj\"{o}rn Sundberg, John Ralph.
+                                                                                             Identification of lignin and polysaccharide modifications
+                                                                                             in populus wood by chemometric analysis of 2D NMR spectra
+                                                                                             from dissolved cell walls. \emph{Molecular Plant}, 2009, 2(5), 933--42.\\
+
+
+                                                                                           \end{bibenum}
+
+
+                                                                                           \end{document}
+
+                                                                                           %%%%%%%%%%%%%%%%%%%%%%%%%% End CV Document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+                                                                                           %----------------------------------------------------------------------%
+                                                                                           % The following is copyright and licensing information for
+                                                                                           % redistribution of this LaTeX source code; it also includes a liability
+                                                                                           % statement. If this source code is not being redistributed to others,
+                                                                                           % it may be omitted. It has no effect on the function of the above code.
+                                                                                           %----------------------------------------------------------------------%
+                                                                                           % Copyright (c) 2007, 2008, 2009, 2010, 2011 by Theodore P. Pavlic
+                                                                                           %
+                                                                                           % Unless otherwise expressly stated, this work is licensed under the
+                                                                                           % Creative Commons Attribution-Noncommercial 3.0 United States License. To
+                                                                                           % view a copy of this license, visit
+                                                                                           % http://creativecommons.org/licenses/by-nc/3.0/us/ or send a letter to
+                                                                                           % Creative Commons, 171 Second Street, Suite 300, San Francisco,
+                                                                                           % California, 94105, USA.
+                                                                                           %
+                                                                                           % THE SOFTWARE IS PROVIDED ``AS IS'', WITHOUT WARRANTY OF ANY KIND, EXPRESS
+                                                                                           % OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+                                                                                           % MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+                                                                                           % IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+                                                                                           % CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+                                                                                           % TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+                                                                                           % SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+                                                                                           %----------------------------------------------------------------------%~
